@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test';
 
-test('Test With Browser Fixture', async ({ browser }) => {
+test('Test With Browser Fixture', async ({ browser }) =>
+{
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto('https://google.com/');
     await expect(page).toHaveTitle(/Google/);
 });
 
-test('Test with Page Fixture', async ({ page }) => {
+test('Test with Page Fixture', async ({ page }) =>
+{
     await page.goto('https://rahulshettyacademy.com/loginpagePractise');
     await expect(page).toHaveTitle(/LoginPage Practise \| Rahul Shetty Academy/);
 
@@ -36,7 +38,8 @@ test('Test with Page Fixture', async ({ page }) => {
     console.log(allProductNames);
 });
 
-test('Ecommerce Login Test', async ({ page }) => {
+test('Ecommerce Login Test', async ({ page }) =>
+{
     await page.goto('https://rahulshettyacademy.com/client');
     await page.locator('#userEmail').fill('selena@gomez.com');
     await page.locator('#userPassword').fill('Iamking@000');
@@ -49,7 +52,8 @@ test('Ecommerce Login Test', async ({ page }) => {
     console.log(await productsTitle.allTextContents());
 });
 
-test('UI Controls', async ({ context, page }) => {
+test('UI Controls', async ({ context, page }) =>
+{
     await page.goto('https://rahulshettyacademy.com/loginpagePractise');
     const documentLink = page.locator('[href*="documents-request"]');
     const usernameInput = page.locator('input#username');
@@ -88,7 +92,8 @@ test('UI Controls', async ({ context, page }) => {
     await page.close();
 });
 
-test('E2E Ecommerce Test', async ({ page }) => {
+test('E2E Ecommerce Test', async ({ page }) =>
+{
     const email = 'anshika@gmail.com';
     const productName = 'ZARA COAT 3';
 
@@ -99,6 +104,7 @@ test('E2E Ecommerce Test', async ({ page }) => {
     const loginButton = page.locator("[value='Login']");
     const cartLink = page.locator("[routerlink*='cart']");
     const cartItems = page.locator('div li');
+    const dropdown = page.locator(".ta-results");
     const checkoutButton = page.locator('text=Checkout');
     const countryDropdown = page.locator('.ta-results');
     const countryInput = page.getByPlaceholder('Select Country');
@@ -115,7 +121,6 @@ test('E2E Ecommerce Test', async ({ page }) => {
     await userEmail.fill(email);
     await userPassword.fill('Iamking@000');
     await loginButton.click();
-    await page.waitForLoadState('networkidle');
 
     await products.first().locator('b').waitFor();
     const titles = await products.locator('b').allTextContents();
@@ -131,8 +136,16 @@ test('E2E Ecommerce Test', async ({ page }) => {
 
     await countryInput.pressSequentially('ind', { delay: 150 });
     await countryDropdown.waitFor();
-    await countryDropdown.locator('button').filter({ hasText: ' India' }).click();
-
+    const optionsCount = await dropdown.locator("button").count();
+    for (let i = 0; i < optionsCount; ++i)
+    {
+        const text = await dropdown.locator("button").nth(i).textContent();
+        if (text === " India")
+        {
+            await dropdown.locator("button").nth(i).click();
+            break;
+        }
+    }
     await expect(userNameLabel).toHaveText(email);
     await submitButton.click();
     await expect(orderSuccessMsg).toHaveText(' Thankyou for the order. ');
@@ -143,9 +156,11 @@ test('E2E Ecommerce Test', async ({ page }) => {
     await myOrdersLink.click();
     await ordersTable.waitFor();
 
-    for (let i = 0; i < await rows.count(); ++i) {
+    for (let i = 0; i < await rows.count(); ++i)
+    {
         const rowOrderId = await rows.nth(i).locator('th').textContent();
-        if (orderId.includes(rowOrderId)) {
+        if (orderId.includes(rowOrderId))
+        {
             await rows.nth(i).locator('button').first().click();
             break;
         }
@@ -153,4 +168,5 @@ test('E2E Ecommerce Test', async ({ page }) => {
 
     const orderIdDetails = await orderDetailsId.textContent();
     expect(orderId.includes(orderIdDetails)).toBeTruthy();
+    await page.close();
 });
