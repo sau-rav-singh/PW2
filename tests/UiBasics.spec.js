@@ -131,7 +131,7 @@ test('E2E Ecommerce Test', async ({ page }) =>
 
     await cartLink.click();
     await cartItems.first().waitFor();
-    await expect(page.locator(`h3:has-text("${productName}")`)).toBeVisible();
+    await expect(page.locator(`h3:has-text("${productName}")`)).toBeVisible();//Not Autowaiting
     await checkoutButton.click();
 
     await countryInput.pressSequentially('ind', { delay: 150 });
