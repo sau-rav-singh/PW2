@@ -131,15 +131,7 @@ test('E2E Ecommerce Test', async ({ page }) => {
 
     await countryInput.pressSequentially('ind', { delay: 150 });
     await countryDropdown.waitFor();
-
-    const optionsCount = await countryDropdown.locator('button').count();
-    for (let i = 0; i < optionsCount; ++i) {
-        const text = await countryDropdown.locator('button').nth(i).textContent();
-        if (text.trim() === 'India') {
-            await countryDropdown.locator('button').nth(i).click();
-            break;
-        }
-    }
+    await countryDropdown.locator('button').filter({ hasText: ' India' }).click();
 
     await expect(userNameLabel).toHaveText(email);
     await submitButton.click();
