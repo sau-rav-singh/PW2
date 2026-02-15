@@ -39,7 +39,7 @@ test('Test with Page Fixture', async ({ page }) =>
 
 });
 
-test.only("Ecommerce Login Test", async ({ page }) =>
+test("Ecommerce Login Test", async ({ page }) =>
 {
     await page.goto('https://rahulshettyacademy.com/client');
     await page.locator('#userEmail').fill('selena@gomez.com');
@@ -54,4 +54,28 @@ test.only("Ecommerce Login Test", async ({ page }) =>
 
 });
 
+test.only("UI Controls", async ({ page }) =>
+{
+    await page.goto('https://rahulshettyacademy.com/loginpagePractise');
+    const usernameInput = page.locator('input#username');
+    const passwordInput = page.locator('input#password');
+    const dropdown = page.locator('select.form-control');
+    const submitButton = page.locator('input[type="submit"]');
+    const userType = page.locator("#usertype").last();
+    const okayButton = page.locator("#okayBtn");
+    const termsCheckBox = page.locator("#terms");
 
+    await usernameInput.fill('rahulshettyacademy');
+    await dropdown.selectOption('consult');
+    await passwordInput.fill('Learning@830$3mK2');
+    await userType.check();
+    await okayButton.click();
+    await expect(userType).toBeChecked();
+    await termsCheckBox.click();
+    expect(await termsCheckBox.isChecked()).toBeTruthy();
+    await submitButton.click();
+    await termsCheckBox.uncheck();
+    await expect(termsCheckBox).not.toBeChecked();
+
+
+});
