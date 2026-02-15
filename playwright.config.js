@@ -5,10 +5,10 @@ export default defineConfig({
   testDir: './tests',
 
   // Execution Settings
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
-  workers: process.env.CI ? 1 : 4,
+  workers: process.env.CI ? 1 : 2,
 
   // Timeouts
   timeout: 20 * 1000,

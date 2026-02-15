@@ -28,7 +28,6 @@ test('Test with Page Fixture', async ({ page }) =>
     await expect(errorAlert).toBeVisible();
     await expect(errorAlert).toContainText('Incorrect username/password');
 
-    await passwordInput.fill('');
     await passwordInput.fill('Learning@830$3mK2');
     await submitButton.click();
 
@@ -40,12 +39,18 @@ test('Test with Page Fixture', async ({ page }) =>
 
 });
 
-test.only("E2E Ecommerce Test", async ({ page }) => {
+test.only("Ecommerce Login Test", async ({ page }) =>
+{
     await page.goto('https://rahulshettyacademy.com/client');
     await page.locator('#userEmail').fill('selena@gomez.com');
     await page.locator('#userPassword').fill('Iamking@000');
     await page.locator('#login').click();
-    
+    await page.waitForLoadState('networkidle');
+
+    const productsTittle = page.locator('.card-body b');
+    await productsTittle.first().waitFor();
+    console.log(await productsTittle.count());
+    console.log(await productsTittle.allTextContents());
 
 });
 
