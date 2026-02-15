@@ -54,7 +54,7 @@ test("Ecommerce Login Test", async ({ page }) =>
 
 });
 
-test.only("UI Controls", async ({ page }) =>
+test("UI Controls", async ({ page }) =>
 {
     await page.goto('https://rahulshettyacademy.com/loginpagePractise');
     const usernameInput = page.locator('input#username');
