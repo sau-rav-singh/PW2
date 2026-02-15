@@ -54,9 +54,10 @@ test("Ecommerce Login Test", async ({ page }) =>
 
 });
 
-test("UI Controls", async ({ page }) =>
+test("UI Controls", async ({ context, page }) =>
 {
     await page.goto('https://rahulshettyacademy.com/loginpagePractise');
+    const documentLink = page.locator('[href*="documents-request"]');
     const usernameInput = page.locator('input#username');
     const passwordInput = page.locator('input#password');
     const dropdown = page.locator('select.form-control');
@@ -65,7 +66,10 @@ test("UI Controls", async ({ page }) =>
     const okayButton = page.locator("#okayBtn");
     const termsCheckBox = page.locator("#terms");
 
+    await expect(documentLink).toHaveAttribute('class', 'blinkingText');
+    await expect(documentLink).toHaveCount(1);
     await usernameInput.fill('rahulshettyacademy');
+    console.log(await usernameInput.inputValue());
     await dropdown.selectOption('consult');
     await passwordInput.fill('Learning@830$3mK2');
     await userType.check();
@@ -73,9 +77,14 @@ test("UI Controls", async ({ page }) =>
     await expect(userType).toBeChecked();
     await termsCheckBox.click();
     expect(await termsCheckBox.isChecked()).toBeTruthy();
-    await submitButton.click();
     await termsCheckBox.uncheck();
     await expect(termsCheckBox).not.toBeChecked();
 
+    const [newPage] = await Promise.all([context.waitForEvent('page'), documentLink.click()]);
+    console.log(await newPage.locator('[class="im-para red"]').textContent());
+    await newPage.close();
+
+    await submitButton.click();
+    await page.close();
 
 });
